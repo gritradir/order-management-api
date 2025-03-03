@@ -4,7 +4,7 @@ import { CreateOrderDto } from '../dtos/create-order.dto';
 import { IOrderService } from '../interfaces/order-service.interface';
 import { IOrderFilter } from '../interfaces/order-filter.interface';
 import { OrderRepository } from '../repositories/order.repository';
-import { IdGeneratorUtil } from 'src/common/utils/id-generator.utils';
+import { IdGeneratorUtil } from '../../../common/utils/id-generator.utils';
 
 @Injectable()
 export class OrdersService implements IOrderService {

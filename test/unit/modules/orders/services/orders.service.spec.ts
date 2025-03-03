@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { OrdersService } from 'src/modules/orders/services/orders.service';
-import { OrderRepository } from 'src/modules/orders/repositories/order.repository';
-import { IdGeneratorUtil } from 'src/common/utils/id-generator.utils';
-import { CreateOrderDto } from 'src/modules/orders/dtos/create-order.dto';
-import { Order } from 'src/modules/orders/entities/order.entity';
+import { OrdersService } from '../../../../../src/modules/orders/services/orders.service';
+import { OrderRepository } from '../../../../../src/modules/orders/repositories/order.repository';
+import { IdGeneratorUtil } from '../../../../../src/common/utils/id-generator.utils';
+import { CreateOrderDto } from '../../../../../src/modules/orders/dtos/create-order.dto';
+import { Order } from '../../../../../src/modules/orders/entities/order.entity';
 
 // Mock repositories and services
 const mockOrderRepository = () => ({
