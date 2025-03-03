@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, FindManyOptions } from 'typeorm';
+import { Repository, Like, FindManyOptions, Raw } from 'typeorm';
 import { Order } from '../entities/order.entity';
 import { IOrderRepository } from '../interfaces/order-repository.interface';
 import { IOrderFilter } from '../interfaces/order-filter.interface';
@@ -18,27 +18,30 @@ export class OrderRepository implements IOrderRepository {
     }
 
     async findAll(filter?: IOrderFilter): Promise<Order[]> {
-        const queryOptions: FindManyOptions<Order> = {
-        where: {},
-        };
-
+        const queryBuilder = this.typeormRepository.createQueryBuilder('order');
+        
         if (filter) {
             if (filter.country) {
-                queryOptions.where = {
-                ...queryOptions.where,
-                country: filter.country,
-                };
+                queryBuilder.andWhere('order.country = :country', { 
+                    country: filter.country 
+                });
             }
 
             if (filter.description) {
-                queryOptions.where = {
-                ...queryOptions.where,
-                paymentDescription: Like(`%${filter.description}%`),
-                };
+                queryBuilder.andWhere('order.paymentDescription LIKE :description', { 
+                    description: `%${filter.description}%` 
+                });
             }
         }
-
-        return this.typeormRepository.find(queryOptions);
+        
+        queryBuilder.orderBy(
+            'CASE WHEN order.country = :priorityCountry THEN 0 ELSE 1 END',
+            'ASC'
+        )
+        .addOrderBy('order.paymentDueDate', 'ASC')
+        .setParameter('priorityCountry', 'Estonia');
+        
+        return queryBuilder.getMany();
     }
 
     async findByUniqueId(uniqueId: string): Promise<Order | null> {

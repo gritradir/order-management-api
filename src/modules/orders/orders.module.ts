@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersController } from './controllers/orders.controller';
 import { OrdersService } from './services/orders.service';
-import { IdGeneratorUtil } from 'src/common/utils/id-generator.utils';
+import { IdGeneratorUtil } from '../../common/utils/id-generator.utils';
 import { Order } from './entities/order.entity';
 import { OrderRepository } from './repositories/order.repository';
 

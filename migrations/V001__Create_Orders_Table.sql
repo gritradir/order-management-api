@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS orders (
-    "orderNumber" VARCHAR(50) PRIMARY KEY,
+    "orderNumber" VARCHAR(50) PRIMARY KEY NOT NULL,
     "paymentDescription" TEXT NOT NULL,
     "streetAddress" TEXT NOT NULL,
     "town" VARCHAR(100) NOT NULL,

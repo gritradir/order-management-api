@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:22 AS builder
 
 WORKDIR /app
 
@@ -19,13 +19,9 @@ RUN npm run build
 RUN npm prune --production
 
 # Production stage
-FROM node:18-alpine
+FROM node:22-slim
 
 WORKDIR /app
-
-# Add wait-for-it script
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
@@ -34,7 +30,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/migrations ./migrations
 
 # Create non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 USER appuser
 
 # Add health check
@@ -44,5 +40,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 # Expose API port
 EXPOSE 3000
 
-# Wait for PostgreSQL and start application
-CMD ["/bin/sh", "-c", "/wait-for-it.sh postgres:5432 -t 60 -- node dist/main"]
+# Simple start command
+CMD ["node", "dist/main"]

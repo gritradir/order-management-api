@@ -35,14 +35,7 @@ export class OrdersService implements IOrderService {
     }
 
     async findAll(filter: IOrderFilter = {}): Promise<Order[]> {
-        const orders = await this.orderRepository.findAll(filter);
-
-        return orders.sort((a, b) => {
-          if (a.country === 'Estonia' && b.country !== 'Estonia') return -1;
-          if (a.country !== 'Estonia' && b.country === 'Estonia') return 1;
-          
-          return a.paymentDueDate.getTime() - b.paymentDueDate.getTime();
-        });
+        return this.orderRepository.findAll(filter);
     }
 
     async findByUniqueId(uniqueId: string): Promise<Order> {
